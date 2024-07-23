@@ -1,0 +1,39 @@
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+# Let's assume we have a function that generates the top N recommendations for a user
+def get_top_n_recommendations(user_id, n=10):
+    # Implement your recommendation logic here
+    # This function should return a list of recommended item IDs for the given user
+    pass
+
+# Define a threshold for what is considered a relevant item
+RELEVANT_THRESHOLD = 4.0  # Example threshold, e.g., ratings >= 4 are considered relevant
+
+# Lists to store true positives, predicted positives, and actual positives
+true_positives = []
+predicted_positives = []
+actual_positives = []
+
+# Iterate over each user in the test set
+for user_id in test_data['user_id'].unique():
+    actual_items = test_data[test_data['user_id'] == user_id]
+    actual_relevant_items = actual_items[actual_items['rating'] >= RELEVANT_THRESHOLD]['id'].tolist()
+
+    recommended_items = get_top_n_recommendations(user_id)
+    
+    true_positive = len(set(recommended_items) & set(actual_relevant_items))
+    predicted_positive = len(recommended_items)
+    actual_positive = len(actual_relevant_items)
+    
+    true_positives.append(true_positive)
+    predicted_positives.append(predicted_positive)
+    actual_positives.append(actual_positive)
+
+# Calculate precision, recall, and F1 score
+precision = sum(true_positives) / sum(predicted_positives) if sum(predicted_positives) > 0 else 0
+recall = sum(true_positives) / sum(actual_positives) if sum(actual_positives) > 0 else 0
+f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
